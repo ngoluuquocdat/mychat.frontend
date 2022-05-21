@@ -1,0 +1,23 @@
+
+
+
+
+.message-card-wrapper {
+    display: flex;
+    .message-card--right,
+    .message-card--left {
+        background-color: #e4e6eb;
+        border-radius: 20px;
+        padding: 12px;
+        .message__content {
+            margin: 0;
+            font-size: 16px;
+            line-height: 16px;
+        }
+    }
+    .message-card--right {
+        margin-left: auto;
+        background-color: rgb(0, 132, 255);
+        color: #fff;
+    }
+}

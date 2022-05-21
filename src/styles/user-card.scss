@@ -1,0 +1,50 @@
+
+
+
+
+.user-card-wrapper {
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #dfdfdf;
+    padding: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    .user-card__left {
+        width: 25%;
+        //padding: 0 15px;
+        .user-avatar {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position-x: center;
+            background-position-y: center;
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            border-radius: 50%;
+        }
+    }
+    .user-card__right {
+        width: 75%;
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .full-name {
+            font-size: 16px;
+            font-weight: 400;
+            color: #000;
+            margin: 0;
+            margin-bottom: 5px;
+        }
+        .latest-message {
+            font-size: 14px;
+            color: #999;
+            margin: 0;
+            width: 100%;
+            overflow: hidden;
+        }
+    }
+}
+.user-card-wrapper:hover {
+    background-color: #eee;
+}
