@@ -4,8 +4,8 @@ import "../styles/user-card.scss";
 class UserCard extends Component {
     
     userCardClick = () => {
-        const userId = this.props.user.id;
-        this.props.userCardClick(userId)
+        //const userId = this.props.user.id;
+        this.props.userCardClick(this.props.user)
     }
     
     render() {

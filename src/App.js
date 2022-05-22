@@ -5,7 +5,7 @@ import Chat from './components/Chat';
 import Login from './components/Login';
 import MainPage from './components/MainPage';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { useState } from 'react';
+import { Component, useState } from 'react';
 import {
   BrowserRouter,
   Switch,
@@ -13,76 +13,81 @@ import {
   Link
 } from "react-router-dom";
 
-const App = () => {
+class App extends Component {
 
-  const [connection, setConnection] = useState();
-  const [messages, setMessages] = useState([]);
+  // const [connection, setConnection] = useState();
+  // const [messages, setMessages] = useState([]);
 
-  const joinRoom = async (user, room) => {
-    try {
-      const connection = new HubConnectionBuilder()
-      .withUrl("https://localhost:7138/chat")
-      .configureLogging(LogLevel.Information)
-      .build();
+  // joinRoom = async (user, room) => {
+  //   try {
+  //     const connection = new HubConnectionBuilder()
+  //     .withUrl("https://207f-2402-800-6205-73ac-eddc-47b3-2f3f-faaa.ngrok.io/chat")
+  //     .configureLogging(LogLevel.Information)
+  //     .build();
 
-      // method to receive message from our server
-      connection.on("ReceiveMessage", (user, message) => {
-        console.log('message received:', message);
-        setMessages(messages => [...messages, {user, message}]);
-      });
+  //     // method to receive message from our server
+  //     connection.on("ReceiveMessage", (user, message) => {
+  //       console.log('message received:', message);
+  //       setMessages(messages => [...messages, {user, message}]);
+  //     });
 
-      // connection stop handler
-      connection.onclose(e => {
-        setConnection();
-        setMessages([]);
-      });
+  //     // connection stop handler
+  //     connection.onclose(e => {
+  //       setConnection();
+  //       setMessages([]);
+  //     });
 
-      await connection.start();
+  //     await connection.start();
 
-      // invoke JoinRoom method in the server
-      await connection.invoke("JoinRoom", {user, room})
-      setConnection(connection);
-    } catch(e) {
-      console.log(e);
-    }
-  }
+  //     // invoke JoinRoom method in the server
+  //     await connection.invoke("JoinRoom", {user, room})
+  //     setConnection(connection);
+  //   } catch(e) {
+  //     console.log(e);
+  //   }
+  // }
 
-  const closeConnection = async () => {
-    try {
-      await connection.stop();
-    } catch(e) {
-      console.log(e)
-    }
-  }
+  // closeConnection = async () => {
+  //   try {
+  //     await connection.stop();
+  //   } catch(e) {
+  //     console.log(e)
+  //   }
+  // }
 
-  const sendMessage = async(message) => {
-    try {
-      // invoke SendMessage method in the server
-      await connection.invoke("SendMessage", message);
-    } catch(e) {
-      console.log(e);
-    }
-  }
+  // sendMessage = async(message) => {
+  //   try {
+  //     // invoke SendMessage method in the server
+  //     await connection.invoke("SendMessage", message);
+  //   } catch(e) {
+  //     console.log(e);
+  //   }
+  // }
 
-  return <BrowserRouter>
-    <div className='app'>
-    <Switch>
-      <Route path="/" exact >
-        <Login />
-      </Route >
-      <Route path="/main" exact>
+  render() {
+    return (
+      <BrowserRouter>
+        <div className='app'>
+          <Switch>
+            <Route path="/" exact >
+              <Login />
+            </Route >
+            <Route path="/main" exact>      
+              <MainPage />
+            </Route>
+          </Switch>
         {/* <h2>MyChat</h2>
         {
           !connection
           ? <Lobby joinRoom={joinRoom} />
           : <Chat messages={messages} sendMessage={sendMessage}/>
         } */}
-        <MainPage />
-      </Route>
-    </Switch>
-      
-    </div>
-  </BrowserRouter>
+          
+        </div>
+      </BrowserRouter>
+    )
+  }
+
 }
 
 export default App;

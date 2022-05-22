@@ -77,9 +77,7 @@ class Login extends Component {
             // set token in local storage
             localStorage.setItem('user-token', res.data.token)
             
-            this.props.history.push('/main');
-            
-
+            this.props.history.push('/main');       
         } catch (error) {
             if (!error.response) {
               console.log(error)
