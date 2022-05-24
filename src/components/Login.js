@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import axios from 'axios';
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineCloseCircle } from "react-icons/ai";
+import { ENV } from "../env";
 import "../styles/login-page.scss";
 
 class Login extends Component {
@@ -15,7 +16,7 @@ class Login extends Component {
         isCreating: false
     };
 
-    baseUrl = "https://localhost:7138";
+    baseUrl = ENV.BASE_URL;
 
     componentDidMount() {
         window.scrollTo(0, 0);
@@ -181,7 +182,7 @@ class Login extends Component {
                     </button>
                     <div className="form-footer">
                         New to Happy Vacation?
-                        <Link className="link" to="/register">Sign up</Link>
+                        <Link className="link" to="/main">Go anonymously</Link>
                     </div>
                 </div>
             </div>

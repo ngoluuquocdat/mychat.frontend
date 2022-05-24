@@ -20,10 +20,12 @@ class ChatBox extends Component {
     // click send button
     sendMessage = () => {
         const message_content = this.state.message_content;
-        this.props.sendMessage(message_content);
-        this.setState({
-            message_content: ''
-        })
+        if(message_content.trim().length > 0) {
+            this.props.sendMessage(message_content);
+            this.setState({
+                message_content: ''
+            })
+        }
     }
 
 

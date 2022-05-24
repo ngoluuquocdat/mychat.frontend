@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import "../styles/user-card.scss";
 
 class UserCard extends Component {
+
+    // state = {
+    //     highlight: this.props.highlight
+    // }
     
     userCardClick = () => {
         //const userId = this.props.user.id;
@@ -11,6 +15,7 @@ class UserCard extends Component {
     render() {
         const user = this.props.user;
         const avatarUrl = `url('${user.avatarUrl}')`;
+        const highlight = this.props.highlight;
 
         return (
             <div className="user-card-wrapper" onClick={this.userCardClick}>
@@ -18,7 +23,7 @@ class UserCard extends Component {
                     <div className="user-avatar" style={{backgroundImage: avatarUrl}}></div>
                 </div>
                 <div className="user-card__right">
-                    <h3 className="full-name">{user.fullName}</h3>
+                    <h3 className={highlight ? "full-name--bold" : "full-name"}>{user.fullName}</h3>
                     <p className="latest-message">{user.latestMessage}</p>
                 </div>
             </div>

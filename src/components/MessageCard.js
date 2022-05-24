@@ -10,7 +10,7 @@ class MessageCard extends Component {
 
         return (
             <div className="message-card-wrapper">
-               <div className={message.senderId === userId ? "message-card--right" : "message-card--left"}>
+               <div className={message.senderId == userId ? "message-card--right" : "message-card--left"}>
                     <p className="message__content">{message.content}</p>
                </div>
             </div>
