@@ -28,7 +28,10 @@ class MainPage extends Component {
         // call api get user info
         await this.getUserInfo();
         // call api get list chat users
-        await this.getChatUsers();
+        const list_users = await this.getChatUsers();
+        this.setState({
+            list_users: list_users
+        })   
         // connect user to chat hub
         await this.connectToChatHub();
     }
@@ -93,7 +96,7 @@ class MainPage extends Component {
     getChatUsers = async () => {
         const token = localStorage.getItem('user-token');
         if(!token) {
-            return;
+            return [];
         }
         try {
             let res = await axios.get(
@@ -102,9 +105,10 @@ class MainPage extends Component {
                     headers: { Authorization:`Bearer ${token}` }
                 }
             );  
-            this.setState({
-                list_users: res.data
-            })      
+            // this.setState({
+            //     list_users: res.data
+            // })    
+            return res.data  
         } catch(e) {
             console.log(e)
         }
@@ -165,9 +169,6 @@ class MainPage extends Component {
         console.log("connect to chat hub")
         let current_user_id = this.state.current_user.id ? this.state.current_user.id : '';
         const connection = this.state.connection;
-        // if(!current_user_id) {
-        //     current_user_id = '';
-        // }
         
         if(connection) {
             console.log("connection exist")
@@ -194,23 +195,45 @@ class MainPage extends Component {
             }
           });
           // method to receive message from our server
-          connection.on("ReceiveMessage", (message) => {
-            //console.log('message received 2:', message);
-            if(!this.state.list_users.find(e => e.id === message.senderId)) {
-                console.log('reload list users')
-                this.getChatUsers();
+          connection.on("ReceiveMessage", async (message) => {
+            console.log('message received 2:', message);
+            //console.log(`current: ${this.state.current_user.id}, sender: ${message.senderId}`)
+            //console.log('current != sender ?', this.state.current_user.id !== message.senderId)
+
+            // update list chat users logic
+            let list_users = [];
+            if(this.state.list_users.length > 0) {
+                list_users=[...this.state.list_users];
+                if((this.state.current_user.id !== message.senderId) && (!this.state.list_users.find(e => e.id === message.senderId))) {
+                    // console.log(`current: ${this.state.current_user.id}, sender: ${message.senderId}`);
+                    // console.log('sender not in list ?', !this.state.list_users.find(e => e.id === message.senderId));
+                    console.log('reload list users');
+                    list_users = await this.getChatUsers();
+                }
             }
             // update messages list logic
             let messages = this.state.messages;
             let unseenSenderIds = this.state.unseenSenderIds;
             if(message.senderId === this.state.withUser.id || message.senderId === this.state.current_user.id) {
                 messages = [...messages, message]
+                console.log('update list messages')
             }
             // update list unseen logic
             if(message.senderId !== this.state.withUser.id && message.senderId !== this.state.current_user.id) {
                 unseenSenderIds = [...unseenSenderIds, message.senderId];
             }
+            // move latest unseen user to top
+            //let list_users = this.state.list_users;
+            if(list_users.length > 0) {
+                if(this.state.current_user.id !== message.senderId) {
+                    const foundIndex = list_users.findIndex(el => el.id === message.senderId);
+                    const latestUser = list_users.splice(foundIndex, 1)[0];
+                    list_users.unshift(latestUser);
+                }
+            }
+
             this.setState({
+                list_users: list_users,
                 messages: messages,
                 unseenSenderIds: unseenSenderIds
             })
