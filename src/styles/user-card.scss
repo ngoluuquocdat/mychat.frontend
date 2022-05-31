@@ -50,6 +50,13 @@
             width: 100%;
             overflow: hidden;
         }
+        .btn-delete {
+            width: 70px;
+        }
+        .btn-delete:hover {
+            background-color: red;
+            color: #fff;
+        }
     }
 }
 .user-card-wrapper:hover {

@@ -11,9 +11,15 @@ class UserCard extends Component {
         //const userId = this.props.user.id;
         this.props.userCardClick(this.props.user)
     }
+
+    deleteAnonymousConversation = (event, deleteUserId) => {
+        event.stopPropagation();
+        this.props.deleteAnonymousConversation(deleteUserId)
+    }
     
     render() {
         const user = this.props.user;
+        const isChattingWith = this.props.isChattingWith;
         const avatarUrl = `url('${user.avatarUrl}')`;
         const highlight = this.props.highlight;
 
@@ -25,6 +31,10 @@ class UserCard extends Component {
                 <div className="user-card__right">
                     <h3 className={highlight ? "full-name--bold" : "full-name"}>{user.fullName}</h3>
                     <p className="latest-message">{user.latestMessage}</p>
+                    {
+                        user.isConversationDeletable && !isChattingWith &&
+                        <button className='btn-delete' onClick={(event) => this.deleteAnonymousConversation(event, user.id)}>DELETE</button>
+                    }
                 </div>
             </div>
         )

@@ -48,6 +48,10 @@ class MainPage extends Component {
         }
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('onbeforeunload', this.onBeforeUnloadHandler);
+    }
+
     getUserInfo = async () => {
         const token = localStorage.getItem('user-token');
         if(!token) {     
@@ -168,6 +172,7 @@ class MainPage extends Component {
     connectToChatHub = async () => {
         console.log("connect to chat hub")
         let current_user_id = this.state.current_user.id ? this.state.current_user.id : '';
+        console.log('cur user id', current_user_id)
         const connection = this.state.connection;
         
         if(connection) {
@@ -246,11 +251,9 @@ class MainPage extends Component {
           });
     
           await connection.start();
-    
-          // invoke JoinRoom method in the server
-        //   console.log("invoke connect")
-        //   console.log("")
-          await connection.invoke("ConnectUserToChatHub", current_user_id.toString())
+          console.log('started connection')
+          await connection.invoke("ConnectUserToChatHub", current_user_id.toString());
+          console.log('invoked connect')
           this.setState({
             connection: connection
           })
@@ -299,6 +302,32 @@ class MainPage extends Component {
         //     pickingUserId: 0
         // })
     }
+
+    // delete anonymous conversation
+    deleteAnonymousConversation = async(deleteUserId) => {
+        const token = localStorage.getItem('user-token');
+        if(!token) {     
+            return;
+        }
+        // delete messages in database
+        try {
+            let res = await axios.delete(
+                `${this.baseUrl}/api/Users/me/conversation?withUserId=${deleteUserId}`,
+                {
+                    headers: { Authorization:`Bearer ${token}` }
+                }
+            );  
+            this.setState({
+                list_users: this.state.list_users.filter(el => el.id !== deleteUserId)
+            })      
+        } catch(e) {
+            console.log(e)
+            if(e.response.status === 401) {
+                this.props.history.push('/');   
+            }
+        }
+        // if chatting with this user, 
+    }
     
     render() {
         const { current_user, withUser, list_users, messages } = this.state;
@@ -327,7 +356,14 @@ class MainPage extends Component {
                             {
                                 list_users.map((item, index) => {
                                     return(
-                                        <UserCard key={'user-card'+item.id} user={item} userCardClick={this.userCardClick} highlight={unseenSenderIds.includes(item.id)}/>
+                                        <UserCard 
+                                            key={'user-card'+item.id} 
+                                            user={item} 
+                                            userCardClick={this.userCardClick} 
+                                            highlight={unseenSenderIds.includes(item.id)}
+                                            deleteAnonymousConversation={this.deleteAnonymousConversation}
+                                            isChattingWith={item.id === withUser.id}
+                                        />
                                     )
                                 })
                             }

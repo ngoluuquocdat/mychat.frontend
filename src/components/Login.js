@@ -182,7 +182,7 @@ class Login extends Component {
                     </button>
                     <div className="form-footer">
                         New to Happy Vacation?
-                        <Link className="link" to="/main">Go anonymously</Link>
+                        <Link className="link" to="/main" onClick={() => localStorage.removeItem('user-token')}>Go anonymously</Link>
                     </div>
                 </div>
             </div>
