@@ -6,21 +6,36 @@
     display: flex;
     .message-card--right,
     .message-card--left {
-        background-color: #e4e6eb;
-        border-radius: 20px;
-        padding: 12px;
-        min-width: 65px;        
-        margin-bottom: 10px;
+        position: relative;
+        margin-bottom: 16px;
+        text-align: left;
         .message__content {
+            background-color: #e4e6eb;
             margin: 0;
             font-size: 16px;
             line-height: 16px;
+            border-radius: 20px;
+            padding: 12px;
+            display:inline-block;
+            min-width: 65px;       
+            text-align: center; 
         }
     }   
+    .message__image {
+        display: block;
+        width: auto;
+        height: 200px;
+        margin-top: 2px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
     .message-card--right {
         margin-left: auto;
-        background-color: rgb(0, 132, 255);
         color: #fff;
+        text-align: right;
+        .message__content {
+            background-color: rgb(0, 132, 255);
+        }
     }
 }
 .message-card-wrapper:first-child {
