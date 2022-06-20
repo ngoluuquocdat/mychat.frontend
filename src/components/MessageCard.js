@@ -18,7 +18,7 @@ class MessageCard extends Component {
                         <p className="message__content">{message.content}</p>
                     }
                     {
-                        (message.content && message.imageUrl.length > 0) &&
+                        (message.imageUrl && message.imageUrl.length > 0) &&
                         <img className='message__image' src={this.baseUrl+message.imageUrl} onClick={() => window.open(this.baseUrl+message.imageUrl, '_blank')}/>
                         //<div className='message__image' style={{backgroundImage: `url('${message.imageUrl}')`}} onClick={() => window.open(message.imageUrl, '_blank')}/>
                     }
