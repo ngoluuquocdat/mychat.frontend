@@ -22,11 +22,14 @@
         }
     }   
     .message__image {
-        display: block;
         width: auto;
         height: 200px;
         margin-top: 2px;
         border-radius: 10px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-position-y: center;
         cursor: pointer;
     }
     .message-card--right {

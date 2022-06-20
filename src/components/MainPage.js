@@ -18,7 +18,11 @@ class MainPage extends Component {
         messages: [],
         connection: null,
         pickingUserId: '',
-        unseenSenderIds: []
+        unseenSenderIds: [],
+        userTyping: {
+            id: 0,
+            isTyping: false
+        }
     }
 
     baseUrl = ENV.BASE_URL;
@@ -169,6 +173,19 @@ class MainPage extends Component {
         }
     }   
 
+    changeTypingState = async (isTyping) => {
+        const connection = this.state.connection;
+        if(connection) {
+            const senderId = this.state.current_user.id.toString();
+            const receiverId = this.state.withUser.id.toString();
+            try {
+                await connection.invoke("ChangeTypingState", isTyping, senderId, receiverId);
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    }
+
     // ket noi signal R
     connectToChatHub = async () => {
         console.log("connect to chat hub")
@@ -244,7 +261,15 @@ class MainPage extends Component {
                 unseenSenderIds: unseenSenderIds
             })
           });
-    
+          connection.on("ChangeTypingState", (message) => {
+            console.log('typing received:', message);
+            this.setState({
+                userTyping: {
+                    id: message.senderId,
+                    isTyping: message.isTyping
+                }
+            })
+          });
           // connection stop handler
           connection.onclose(e => {
             //setConnection();
@@ -331,7 +356,7 @@ class MainPage extends Component {
     }
     
     render() {
-        const { current_user, withUser, list_users, messages } = this.state;
+        const { current_user, withUser, list_users, messages, userTyping } = this.state;
         const { pickingUserId } = this.state;
         const { unseenSenderIds } = this.state;
         const anonymous_mode = !localStorage.getItem('user-token');
@@ -374,7 +399,14 @@ class MainPage extends Component {
                 <div className="main-page__right">
                     {
                         withUser.id !== 0 &&
-                        <ChatBox userId={current_user.id} withUser={withUser} messages={messages} sendMessage={this.sendMessage}/>
+                        <ChatBox 
+                            userId={current_user.id} 
+                            withUser={withUser} 
+                            messages={messages} 
+                            sendMessage={this.sendMessage}
+                            userTyping={userTyping}
+                            changeTypingState={this.changeTypingState}
+                        />
                     }
                 </div>
             </div>
