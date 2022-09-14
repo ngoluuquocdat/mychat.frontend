@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Lobby from './components/Lobby';
 import Chat from './components/Chat';
 import Login from './components/Login';
+import TestPage from './components/TestPage';
 import MainPage from './components/MainPage';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Component, useState } from 'react';
@@ -70,7 +71,8 @@ class App extends Component {
         <div className='app'>
           <Switch>
             <Route path="/" exact >
-              <Login />
+              {/* <Login /> */}
+              <TestPage />
             </Route >
             <Route path="/main" exact>      
               <MainPage />
